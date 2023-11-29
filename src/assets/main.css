@@ -1,0 +1,48 @@
+/* @import url('../../public/skins/ui/oxide/skin.css'); */
+@import url('tinymce/skins/ui/oxide/skin.css');
+
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Basic Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
+/* Remove list styles */
+ul, ol {
+  list-style: none;
+}
+
+/* Remove default hyperlink styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Remove default button styles */
+button, input {
+  border: none;
+  outline: none;
+}
+
+/* Box Sizing */
+html {
+  box-sizing: border-box;
+}
+
+/* Clearfix */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
