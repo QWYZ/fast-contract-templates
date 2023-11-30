@@ -45,15 +45,15 @@ onMounted(() => {
     initPdf();
 });
 
-const generatePDF = async() => {
+const generatePDF = async () => {
     const element = document.querySelector('[class="pdfViewer"]'); // 或者选择要生成 PDF 的特定元素
     try {
-      const canvas = await html2canvas(element);
-      const pdf = new jsPDF();
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-      pdf.save('合同.pdf');
+        const canvas = await html2canvas(element);
+        const pdf = new jsPDF();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+        pdf.save('合同.pdf');
     } catch (error) {
-      console.error('Error generating PDF:', error);
+        console.error('Error generating PDF:', error);
     }
 };
 
@@ -124,7 +124,7 @@ const innerEditorModal = (data) => {
         name: data?.name,
         value: data?.value,
         fillContentType: data?.fillContentType,
-        fillUserType:data?.fillUserType,
+        fillUserType: data?.fillUserType,
     });
     let targetElement = document.querySelector(`[name="page=${pageNum}"]`); //目标节点
     let marker = document.createElement('div');
@@ -333,11 +333,24 @@ input {
 }
 
 .resizable {
-    width: 100px;
-    height: 30px;
+    // width: 100px;
+    // height: 30px;
     box-sizing: border-box;
-    resize: both;
+    // resize: both;
     overflow: hidden;
     position: absolute;
+
+    &::before {
+        content: "";
+        position: absolute;
+        width: 20px;
+        /* 调整拖拽触发位置的宽度 */
+        height: 20px;
+        /* 调整拖拽触发位置的高度 */
+        top: 0;
+        right: 0;
+        cursor: nesw-resize;
+        /* 定义右上角为调整大小的光标 */
+    }
 }
 </style>
