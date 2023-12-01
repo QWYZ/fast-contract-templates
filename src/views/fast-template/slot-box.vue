@@ -3,9 +3,9 @@
         <div class="img-body" v-if="fillContentType === 'img'">
             <img draggable="false" v-if="value" :src="value" alt="">
         </div>
-        <div v-if="fillContentType === 'text'">
+        <p v-if="fillContentType === 'text'">
             {{ value }}
-        </div>
+        </p>
     </div>
 </template>
 
@@ -31,7 +31,13 @@ const props = defineProps({
     position: relative;
     width: 100%;
     height: 100%;
-    padding: 2px;
+    min-height: 15px;
+    line-height: 15px;
+    padding: 0px;
+    display: flex;
+    align-items: flex-end;
+    font-size: 15px;
+    color: #000;
     // background-color: #a4d0ee88;
     .img-body{
         width: 100%;
@@ -43,7 +49,7 @@ const props = defineProps({
         img{
             display: block;
             width: 100%;
-            height: auto;
+            height: 100%;
         }
     }
 }

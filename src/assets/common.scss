@@ -1,0 +1,390 @@
+@charset "utf-8";
+@import "//at.alicdn.com/t/c/font_4293683_8z9z3jajnrq.css";
+
+/*阿里巴巴图标库*/
+
+:root {
+  --primary-color: #ed4e38;//主题色
+  --bg-color:#f8f8f8;//页面背景色
+  --btn-text-color: #ffffff;//按钮字体颜色
+  --btn-bg-color:var(--primary-color);//按钮背景色，默认主题色
+  --el-color-primary: var(--primary-color);
+}
+
+html,
+body {
+  font-size: 14px;
+  color: #333;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+dl,
+dd,
+dt,
+div,
+span {
+  margin: 0;
+  padding: 0;
+  font-family: "Microsoft YaHei", "SourceHanSansCN";
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+  font-family: "Microsoft YaHei", "SourceHanSansCN";
+}
+
+a {
+  text-decoration: none;
+}
+
+/*公共宽度*/
+.common {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.bg-gray {
+  background-color: #f8f8f8;
+}
+
+.color-primary {
+  color: var(--primary-color);
+}
+
+.color-white {
+  color: #fff;
+}
+
+.color-9 {
+  color: #999;
+}
+
+.color-6 {
+  color: #666;
+}
+
+.color-3 {
+  color: #333;
+}
+
+.color-0 {
+  color: #000;
+}
+
+/*单行文本超出显示省略号*/
+.g-cut {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/*多行省略*/
+@for $i from 2 to 5 {
+  .g-cut-#{$i} {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $i;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.g-relative {
+  position: relative;
+}
+
+.g-absolute {
+  position: absolute;
+}
+
+.g-box {
+  box-sizing: border-box;
+}
+
+.g-text-left {
+  text-align: left;
+}
+
+.g-text-center {
+  text-align: center;
+}
+
+.g-text-right {
+  text-align: right;
+}
+
+// 定义字体(px)单位，12-32px
+@for $i from 12 to 32 {
+  .g-font-#{$i} {
+    font-size: $i + px;
+  }
+}
+
+.g-font-bold {
+  font-weight: bold;
+}
+
+.g-bold-5 {
+  font-weight: 500;
+}
+
+.g-bold-4 {
+  font-weight: 400;
+}
+
+// 定义行高(px)单位，2-80px
+@for $i from 1 to 40 {
+  .g-lh-#{$i*2} {
+    line-height: #{$i * 2}+px;;
+  }
+}
+
+// 定义内外边距，遍历1-80
+@for $i from 1 through 40 {
+  .g-m-#{$i*2} {
+    margin: #{$i * 2}+px;
+  }
+
+  .g-m-x-#{$i*2} {
+    margin-left: #{$i * 2}+px;
+    margin-right: #{$i * 2}+px;
+  }
+
+  .g-m-y-#{$i*2} {
+    margin-top: #{$i * 2}+px;
+    margin-bottom: #{$i * 2}+px;
+  }
+
+  .g-p-#{$i*2} {
+    padding: #{$i * 2}+px;
+  }
+
+  .g-p-x-#{$i*2} {
+    padding-left: #{$i * 2}+px;
+    padding-right: #{$i * 2}+px;
+  }
+
+  .g-p-y-#{$i*2} {
+    padding-top: #{$i * 2}+px;
+    padding-bottom: #{$i * 2}+px;
+  }
+
+  @each $short,
+  $long in l left,
+  t top,
+  r right,
+  b bottom {
+
+    // 定义外边距
+    .g-m-#{$short}-#{$i*2} {
+      margin-#{$long}: #{$i * 2}+px;
+    }
+
+    // 定义内边距
+    .g-p-#{$short}-#{$i*2} {
+      padding-#{$long}: #{$i * 2}+px;
+    }
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+// 禁止选择
+.unselect {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+
+// flex 布局样式
+.g-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.g-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.g-flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.g-col-center {
+  align-items: center;
+}
+
+.g-col-top {
+  align-items: flex-start;
+}
+
+.g-col-bottom {
+  align-items: flex-end;
+}
+
+.g-col-stretch {
+  align-items: stretch;
+}
+
+.g-row-center {
+  justify-content: center;
+}
+
+.g-row-left {
+  justify-content: flex-start;
+}
+
+.g-row-right {
+  justify-content: flex-end;
+}
+
+.g-row-between {
+  justify-content: space-between;
+}
+
+.g-row-around {
+  justify-content: space-around;
+}
+
+.g-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.g-flex-1 {
+  flex: 1;
+}
+
+// 定义flex等分
+@for $i from 1 through 12 {
+  .g-flex-#{$i} {
+    flex: $i;
+  }
+}
+
+// grid 布局
+.g-grid {
+  display: grid;
+  display: -ms-grid;
+}
+
+// 定义grid等分列数
+@for $i from 2 through 12 {
+  .g-grid-cols-#{$i} {
+    grid-template-columns: repeat($i, auto);
+  }
+}
+
+// 定义grid等分列数左对齐
+@for $i from 2 through 12 {
+  .g-grid-cols-#{$i}-l {
+    grid-template-columns: repeat($i, 1fr);
+  }
+}
+
+// 定义grid行列间距数
+@for $i from 4 through 20 {
+  .g-grid-gap-#{$i*2} {
+    grid-row-gap: $i * 2 + px;//行间距
+    grid-column-gap:$i * 2+px;//列间距
+  }
+}
+
+// 清除浮动
+.clearfix {
+  &::before {
+    content: "";
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+// 悬停阴影
+.g-shadow {
+  transition: box-shadow 0.3s;
+
+  &:hover {
+    box-shadow: 0 6px 12px 2px rgba($color: hsl(336, 4%, 24%), $alpha: 0.2) !important;
+  }
+}
+
+.g-shadow-m {
+  transition: box-shadow 0.3s;
+
+  &:hover {
+    box-shadow: 0 3px 6px 1px rgba($color: hsl(336, 4%, 24%), $alpha: 0.2) !important;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all 0.5s;
+}
+
+.fade-transform-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all 0.5s;
+}
+
+.breadcrumb-enter,
+.breadcrumb-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.breadcrumb-move {
+  transition: all 0.5s;
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
+}

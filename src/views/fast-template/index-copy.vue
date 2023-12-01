@@ -94,6 +94,8 @@ const initPdf = () => {
 /**插入Marker */
 const innerEditorModal = (data) => {
     console.log("执行插入Marker:", data.keyParam);
+    let isResizing = false;
+    let isDragging = false;
     const { pageNum, keyParam, zIndex } = data;
     // 将内容组件动态插入指定位置
     const childApp = createApp(slotBox, {
@@ -110,20 +112,36 @@ const innerEditorModal = (data) => {
     marker.style = data?.style || '';
     marker.style.zIndex = 200 + Number(zIndex);
     marker.id = keyParam;
-    marker.addEventListener('dragstart', function (event) {
-        // 记录鼠标相对于拖拽元素左上角的偏移
-        const markerRect = event.target.getBoundingClientRect();
-        event.dataTransfer.setData('text/plain', event.target.id);
-        event.dataTransfer.setData('offsetX', event.clientX - markerRect.left);
-        event.dataTransfer.setData('offsetY', event.clientY - markerRect.top);
-        event.dataTransfer.setData('markerW', markerRect.width);
-        event.dataTransfer.setData('markerH', markerRect.height);
-        event.target.style.cursor = 'grabbing';
-    });
-    marker.addEventListener('dragend', function (event) {
-        event.target.style.cursor = 'grab';
-    });
-
+    marker.addEventListener('mousedown', (event) => {
+        if (isInResizableArea(event)) {
+            isResizing = true;
+            let startEvent = event;
+            let startWidth = parseInt(document.defaultView.getComputedStyle(marker).width, 10);
+            let startHeight = parseInt(document.defaultView.getComputedStyle(marker).height, 10);
+            document.addEventListener('mousemove', (event) => handleMouseMove(startEvent, event, startWidth, startHeight));
+            document.addEventListener('mouseup', () => {
+                console.log("松开鼠标--mouseup");
+                isResizing = false;
+                isDragging = false;
+                document.removeEventListener('mousemove', handleMouseMove);
+            });
+        } else {
+            isDragging = true;
+            marker.addEventListener('dragstart', function (event) {
+                // 记录鼠标相对于拖拽元素左上角的偏移
+                const markerRect = event.target.getBoundingClientRect();
+                event.dataTransfer.setData('text/plain', event.target.id);
+                event.dataTransfer.setData('offsetX', event.clientX - markerRect.left);
+                event.dataTransfer.setData('offsetY', event.clientY - markerRect.top);
+                event.dataTransfer.setData('markerW', markerRect.width);
+                event.dataTransfer.setData('markerH', markerRect.height);
+                event.target.style.cursor = 'grabbing';
+            });
+            marker.addEventListener('dragend', function (event) {
+                event.target.style.cursor = 'grab';
+            });
+        }
+    })
     // 创建 ResizeObserver 实例监听宽度和高度的变化
     const resizeObserver = new ResizeObserver(debounce(entries => {
         updateMarkStyle(entries[0].target.id, entries[0].target.style.cssText);
@@ -132,6 +150,31 @@ const innerEditorModal = (data) => {
     resizeObserver.observe(marker);
     targetElement.appendChild(marker);
     childApp.mount(marker);
+
+    function isInResizableArea(event) {
+        const rect = marker.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+
+        // 检查鼠标是否在右上角可调整的区域内
+        return mouseX >= rect.width - 5 && mouseY <= 5;
+    }
+    function handleMouseMove(startEvent, event, startWidth, startHeight) {
+        if (isResizing) {
+            console.log('handleMouseMove---startEvent', startEvent);
+            console.log('handleMouseMove---endEvent', event);
+            const startX = startEvent.clientX;
+            const startY = startEvent.clientY;
+            const deltaX = event.clientX - startX;
+            const deltaY = startY - event.clientY;
+
+            const newWidth = startWidth + deltaX;
+            const newHeight = startHeight + deltaY;
+
+            marker.style.width = `${newWidth}px`;
+            marker.style.height = `${newHeight}px`;
+        }
+    }
 }
 
 const allowDrop = (event) => {
@@ -312,19 +355,19 @@ input {
     width: 100px;
     height: 30px;
     box-sizing: border-box;
-    resize: both;
+    // resize: both;
     overflow: hidden;
     position: absolute;
 
-    // &::before {
-    //     content: "";
-    //     position: absolute;
-    //     width: 5px;
-    //     height: 5px;
-    //     top: 0;
-    //     right: 0;
-    //     z-index: 202;
-    //     cursor: nesw-resize;
-    // }
+    &::before {
+        content: "";
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        top: 0;
+        right: 0;
+        z-index: 202;
+        cursor: nesw-resize;
+    }
 }
 </style>

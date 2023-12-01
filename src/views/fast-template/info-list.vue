@@ -3,19 +3,34 @@
         <div class="opts-row">
             <button class="opt-btn" @click="openEditModal">添加填充标记</button>
         </div>
-        <el-table :data="tableData" stripe style="width: 100%">
+        <el-table :data="tableData" stripe style="width: 100%; height: 85vh;">
             <el-table-column prop="name" label="标记名称" />
             <el-table-column prop="keyParam" label="关键字" />
-            <el-table-column prop="fillContentType" label="填充类型" />
-            <el-table-column prop="pageNum" label="位置" />
-            <el-table-column label="操作">
+            <el-table-column prop="fillUserType" label="填写方">
                 <template #default="scope">
-                    <el-button link type="primary" size="small" @click="viewDetail(scope.$index, scope.row)">详情</el-button>
+                    <span v-if="scope.row.fillUserType == 1">甲方</span>
+                    <span v-if="scope.row.fillUserType == 2">乙方</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="fillContentType" label="填充类型">
+                <template #default="scope">
+                    <span v-if="scope.row.fillContentType == 'text'">文字填充</span>
+                    <span v-if="scope.row.fillContentType == 'img'">签字/签章</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="pageNum" label="位置">
+                <template #default="scope">
+                    {{ `第${scope.row.pageNum}页 `}}
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" :width="96">
+                <template #default="scope">
+                    <el-button link type="primary" size="small" @click="editDetail(scope.$index, scope.row)">编辑</el-button>
                     <el-button link type="primary" size="small" @click="delMarker(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <edit-modal v-if="showAddModal" v-model:visible="showAddModal" @close="showAddModal = false" @confirmAdd="confirmAdd"></edit-modal>
+        <edit-modal :editData="editData" v-model:visible="showAddModal" @close="showAddModal = false" @confirmAdd="confirmAdd" @confirmChange="confirmChange"></edit-modal>
     </div>
 </template>
 
@@ -31,22 +46,41 @@ const props = defineProps({
 
 })
 const emits = defineEmits(['addMarker','removeMarker'])
-const showAddModal = ref(false);
+const showAddModal = ref(false);//编辑模态框状态
+const editData = ref({}); //编辑数据
 const openEditModal = () =>{
+    editData.value = null;
     showAddModal.value = true;
 }
+/**执行新增 */
 const confirmAdd = (data) =>{
-    console.log('confirmAdd:',data);
+    // console.log('confirmAdd:',data);
     data['style']=`bottom:50%; left:40%;`;
     localStorageMethods.setItem('ContractMakerList',[...props.tableData,data]);
     emits("addMarker",data);
     showAddModal.value = false;
 }
 
-const viewDetail = (i,data) =>{
-    console.log(i,data);
+/**执行修改 */
+const confirmChange = (data,i) =>{
+    emits("removeMarker",data.keyParam);
+    props.tableData[i] = data;
+    localStorageMethods.setItem('ContractMakerList',props.tableData);
+    emits("addMarker",data);
+    showAddModal.value = false;
 }
 
+/**编辑 */
+const editDetail = (i,data) =>{
+    editData.value = {
+        data:{...data},
+        index:i
+    };
+    showAddModal.value = true;
+    // console.log(i,data);
+}
+
+/**删除 */
 const delMarker = (i,data) =>{
     // console.log(i,data);
     props.tableData.splice(i,1);
