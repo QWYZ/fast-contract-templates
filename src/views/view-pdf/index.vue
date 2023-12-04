@@ -1,9 +1,9 @@
 <template>
   <div class="contract_1" ref="contractPdf"></div>
-  <div class="float-btn" @click="generatePDF2">
+  <div class="float-btn" @click="downloadPdf(curViewPdf)">
     下载PDF
   </div>
-  <div v-if="generatePDFLoading" class="toast">正在获取合同文件...</div>
+  <div v-if="PDFLoading && toastMsg" class="toast">{{ toastMsg }}</div>
 </template>
 
 <script setup>
@@ -169,16 +169,18 @@ const markList = ref([
 ]);
 const newMarkList = ref([])
 const pdfPageNum = ref();
-const generatePDFLoading = ref(false);
+const PDFLoading = ref(false);
+const curViewPdf = ref();
+const toastMsg = ref('');
 onBeforeMount(() => {
-  // getMarkList();
+  getMarkList();
   handleMarkerData();
 })
 
 onMounted(async () => {
   // initPdf(pdfurl1);
-  
   const pdfData = await generatePDF();
+  curViewPdf.value = pdfData;
   initPdf('', pdfData);
 });
 
@@ -189,6 +191,8 @@ onMounted(async () => {
 */
 const generatePDF = async () => {
   let pdfBytes, pdfDoc;
+  PDFLoading.value = true;
+  toastMsg.value = "合同文件加载中...";
   try {
     const response = await fetch(pdfurl1);
     pdfBytes = await response.arrayBuffer();
@@ -231,15 +235,10 @@ const generatePDF = async () => {
 
     }
     const modifiedPdfBytes = await pdfDoc.save();
+    PDFLoading.value = false;
     console.log('PDF loaded successfully!');
 
     return modifiedPdfBytes;
-    //下载pdf
-    // const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
-    // const link = document.createElement('a');
-    // link.href = URL.createObjectURL(blob);
-    // link.download = '合同.pdf';
-    // link.click();
   } catch (error) {
     console.error('Error loading PDF:', error);
   }
@@ -274,6 +273,16 @@ const embedSubsetFont = async (fontBuffer, charactersToEmbed) => {
     console.log('子集化失败：', error);
   }
 
+}
+
+/**下载Pdf */
+const downloadPdf = (dataByte) => {
+  //下载pdf
+  const blob = new Blob([dataByte], { type: 'application/pdf' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = '合同.pdf';
+  link.click();
 }
 
 /**Fontmin字体子集化
@@ -372,7 +381,7 @@ const initContrctMark = () => {
  * 实现：采用Html转pdf
 */
 const generatePDF2 = async () => {
-  generatePDFLoading.value = true;
+  PDFLoading.value = true;
   try {
     const pdf = new jsPDF({
       unit: 'mm',
@@ -404,10 +413,10 @@ const generatePDF2 = async () => {
       }
     }
     pdf.save('合同.pdf');
-    generatePDFLoading.value = false;
+    PDFLoading.value = false;
   } catch (error) {
     console.error('Error generating PDF:', error);
-    generatePDFLoading.value = false;
+    PDFLoading.value = false;
   }
 };
 </script>
