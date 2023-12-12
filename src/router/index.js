@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import EditorView from '../views/editor/index.vue'
 import HomeView from '../views/HomeView.vue'
-import ContractView1 from "../views/contract/first.vue";
 import pdfView from "../views/view-pdf/index.vue";
 import fastTemplate from "../views/fast-template/index.vue";
 
@@ -12,20 +10,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
-    },
-    {
-      path: '/editor',
-      name: 'editor',
-      component: EditorView
-    },
-    {
-      path: '/first',
-      redirect:'/contract/first',
-    },
-    {
-      path: '/contract/first',
-      name: 'contract',
-      component: ContractView1
     },
     {
       path: '/view-pdf',

@@ -18,7 +18,7 @@
 
     </div>
 </template>
-  
+  <!--这个页面作废  -->
 <script setup>
 import Pdfh5 from 'pdfh5';
 import pdfurl1 from "@/assets/pdf/volserver.pdf";

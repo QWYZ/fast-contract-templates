@@ -1,8 +1,6 @@
 <template>
 <div class="home-view">
   <nav class="nav-list">
-    <RouterLink class="nav" to="/editor">富文本工具</RouterLink>
-    <RouterLink class="nav" to="/contract/first">合同1</RouterLink>
     <RouterLink class="nav" to="/fast-template">创建合同模板</RouterLink>
     <RouterLink class="nav" to="/view-pdf">预览合同</RouterLink>
   </nav>

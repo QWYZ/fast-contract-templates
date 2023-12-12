@@ -12,7 +12,7 @@ import Pdfh5 from 'pdfh5';
 import html2canvas from 'html2canvas';
 import fontkit from '@pdf-lib/fontkit';
 import opentype from 'opentype.js';
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { PDFDocument, rgb } from 'pdf-lib';
 import jsPDF from 'jspdf';
 import pdfurl1 from "@/assets/pdf/volserver.pdf";
 import NotoSansCJKscFont from "../../assets/font/NotoSansCJKsc-Regular.otf";
@@ -178,7 +178,6 @@ onBeforeMount(() => {
 })
 
 onMounted(async () => {
-  // initPdf(pdfurl1);
   const pdfData = await generatePDF();
   curViewPdf.value = pdfData;
   initPdf('', pdfData);
@@ -285,26 +284,6 @@ const downloadPdf = (dataByte) => {
   link.click();
 }
 
-/**Fontmin字体子集化
- * 该方案目测有兼容性问题，半天没解决
-*/
-// const embedSubsetFont = async (fontBuffer, charactersToEmbed) => {
-//   // 使用 fontmin 创建实例
-//   const fontmin = new Fontmin()
-//     .src({ buffer: fontBuffer })
-//     .use(Fontmin.glyph({ text: charactersToEmbed }));
-
-//   // 运行子集化
-//   const files = await fontmin.run();
-
-//   // 获取子集字体文件
-//   const subsetFontBuffer = files[0].contents;
-
-//   // 嵌入子集字体
-//   // const font = await pdfDoc.embedFont(subsetFontBuffer);
-//   return subsetFontBuffer
-// }
-
 /**处理填充标记数据 */
 const handleMarkerData = (data = []) => {
   let newData = [];
@@ -339,11 +318,6 @@ const initPdf = (pdfurl, data) => {
   });
   pdfh5.on("ready", function () {
     pdfPageNum.value = this.totalNum;
-    // console.log("总页数：" + this.totalNum)
-  })
-  pdfh5.on("success", function () {
-    // console.log("initPdf-success");
-    // initContrctMark();
   })
 }
 
@@ -380,45 +354,45 @@ const initContrctMark = () => {
 /**合成PDF文件 
  * 实现：采用Html转pdf
 */
-const generatePDF2 = async () => {
-  PDFLoading.value = true;
-  try {
-    const pdf = new jsPDF({
-      unit: 'mm',
-      format: 'a4',
-      compression: 'NONE',
-    });
-    console.log('pdfPageNum:', pdfPageNum.value);
-    // 循环遍历每个元素，生成图片并添加到 PDF
-    for (let i = 1; i <= pdfPageNum.value; i++) {
-      console.log('循环遍历每个元素:', i);
-      const pageHtmlDom = document.querySelector(`[name="page=${i}"]`); // 或者选择要生成 PDF 的特定元素
-      console.log('pageHtmlDom.offsetWidth', pageHtmlDom.offsetWidth);
-      console.log('pageHtmlDom.offsetHeight', pageHtmlDom.offsetHeight);
-      const canvas = await html2canvas(pageHtmlDom, {
-        width: pageHtmlDom.offsetWidth,
-        height: pageHtmlDom.offsetHeight,
-        scrollX: 0,
-        scrollY: 0,
-        x: 0,
-        y: 0,
-        allowTaint: true,
-        useCORS: true,
-        // scale: 5, // 调整分辨率
-        logging: true, // 打开日志
-      });
-      pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-      if (i < pdfPageNum.value) {
-        pdf.addPage();
-      }
-    }
-    pdf.save('合同.pdf');
-    PDFLoading.value = false;
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    PDFLoading.value = false;
-  }
-};
+// const generatePDF2 = async () => {
+//   PDFLoading.value = true;
+//   try {
+//     const pdf = new jsPDF({
+//       unit: 'mm',
+//       format: 'a4',
+//       compression: 'NONE',
+//     });
+//     console.log('pdfPageNum:', pdfPageNum.value);
+//     // 循环遍历每个元素，生成图片并添加到 PDF
+//     for (let i = 1; i <= pdfPageNum.value; i++) {
+//       console.log('循环遍历每个元素:', i);
+//       const pageHtmlDom = document.querySelector(`[name="page=${i}"]`); // 或者选择要生成 PDF 的特定元素
+//       console.log('pageHtmlDom.offsetWidth', pageHtmlDom.offsetWidth);
+//       console.log('pageHtmlDom.offsetHeight', pageHtmlDom.offsetHeight);
+//       const canvas = await html2canvas(pageHtmlDom, {
+//         width: pageHtmlDom.offsetWidth,
+//         height: pageHtmlDom.offsetHeight,
+//         scrollX: 0,
+//         scrollY: 0,
+//         x: 0,
+//         y: 0,
+//         allowTaint: true,
+//         useCORS: true,
+//         // scale: 5, // 调整分辨率
+//         logging: true, // 打开日志
+//       });
+//       pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+//       if (i < pdfPageNum.value) {
+//         pdf.addPage();
+//       }
+//     }
+//     pdf.save('合同.pdf');
+//     PDFLoading.value = false;
+//   } catch (error) {
+//     console.error('Error generating PDF:', error);
+//     PDFLoading.value = false;
+//   }
+// };
 </script>
 
 <style lang='scss' scoped>

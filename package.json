@@ -22,7 +22,6 @@
     "pdf-lib": "^1.17.1",
     "pdfh5": "1.4.7",
     "sass": "^1.69.5",
-    "tinymce": "5.1.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5",
     "web-streams-polyfill": "3.2.1"

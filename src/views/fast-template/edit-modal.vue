@@ -54,8 +54,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import { localStorageMethods } from "@/utils/storage"
+import { computed, ref } from 'vue';
 const props = defineProps({
     visible: {
         type: Boolean,
