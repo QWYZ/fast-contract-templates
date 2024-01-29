@@ -3,7 +3,7 @@
         <div class="opts-row">
             <button class="opt-btn" @click="openEditModal">添加填充标记</button>
         </div>
-        <el-table :data="tableData" stripe style="width: 100%; height: 85vh;">
+        <el-table :data="tableData" stripe style="width: 100%; height: 85vh;" highlight-current-row row-style="">
             <el-table-column prop="name" label="标记名称" />
             <el-table-column prop="keyParam" label="关键字" />
             <el-table-column prop="fillUserType" label="填写方">

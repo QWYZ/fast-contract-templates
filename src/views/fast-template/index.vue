@@ -1,6 +1,15 @@
 <template>
     <div class="page-view">
         <h2>合同信息设置</h2>
+        <div>
+            <h3>更换合同模板文件（⚠刷新页面自动重置文件）</h3>
+            <el-upload ref="upload" class="upload-demo" :limit="1" :on-exceed="handleExceed" :on-change="handleBeforeUpload"
+                accept=".pdf" :auto-upload="false">
+                <template #trigger>
+                    <el-button type="primary">选择文件</el-button>
+                </template>
+            </el-upload>
+        </div>
         <div class="container">
             <div class="set-body">
                 <info-list @addMarker="addMarker" @removeMarker="removeMarker" :tableData="markList"></info-list>
@@ -14,8 +23,6 @@
 
             </div>
         </div>
-
-
     </div>
 </template>
   
@@ -27,23 +34,46 @@ import InfoList from './info-list.vue';
 import { localStorageMethods } from '@/utils/storage';
 import { debounce } from '@/utils/utils';
 import slotBox from './slot-box.vue';
+import { genFileId } from 'element-plus';
 
 const contractPdf = ref();
 const currentPageNum = ref(1);
 const markList = ref([]);
 const isResized = ref(false);
-
+const upload = ref();
+let pdfh5 = null;
 onBeforeMount(() => {
     getMarkList();
 })
 
 onMounted(() => {
-    initPdf();
+    initPdf(contractPdf.value, {
+        pdfurl: pdfurl1
+    });
 });
 
 const getMarkList = () => {
     let data = localStorageMethods.getItem("ContractMakerList");
     markList.value = data || [];
+}
+
+const handleExceed = (files) => {
+    upload.value.clearFiles()
+    const file = files[0]
+    file.uid = genFileId()
+    upload.value.handleStart(file)
+}
+
+const handleBeforeUpload = (e) => {
+    const fileReader = new FileReader();
+    fileReader.onload = function (event) {
+        const pdfData = event.target.result;
+        console.log('pdfData',pdfData);
+        initPdf(contractPdf.value, {
+            data: pdfData
+        });
+    };
+    fileReader.readAsArrayBuffer(e.raw);
 }
 
 /**初始化合同标记 */
@@ -56,6 +86,7 @@ const initContrctMark = () => {
 }
 
 const addMarker = (data) => {
+    pdfh5 && pdfh5.goto(data.pageNum);
     innerEditorModal(data);
     getMarkList();
 }
@@ -67,9 +98,11 @@ const removeMarker = (keyParam) => {
 }
 
 /**初始化合同Pdf阅读器 */
-const initPdf = () => {
-    let pdfh5 = new Pdfh5(contractPdf.value, {
-        pdfurl: pdfurl1,
+const initPdf = (el, opts) => {
+    pdfh5 = new Pdfh5(el, {
+        pageNum: true, //显示页码
+        backTop: false, //显示返回顶部
+        ...opts
     });
     pdfh5.on("ready", function () {
         // console.log("总页数：" + this.totalNum)
