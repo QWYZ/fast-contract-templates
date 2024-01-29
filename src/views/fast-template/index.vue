@@ -2,13 +2,14 @@
     <div class="page-view">
         <h2>合同信息设置</h2>
         <div>
-            <h3>更换合同模板文件（⚠刷新页面自动重置文件）</h3>
-            <el-upload ref="upload" class="upload-demo" :limit="1" :on-exceed="handleExceed" :on-change="handleBeforeUpload"
+            <div style="display: inline-flex;"><b style="font-size: 16px;">更换合同模板文件：</b></div>
+            <el-upload ref="upload" class="upload" :limit="1" :on-exceed="handleExceed" :on-change="handleBeforeUpload"
                 accept=".pdf" :auto-upload="false">
                 <template #trigger>
                     <el-button type="primary">选择文件</el-button>
                 </template>
             </el-upload>
+            <span>（⚠刷新页面自动重置文件）</span>
         </div>
         <div class="container">
             <div class="set-body">
@@ -321,6 +322,10 @@ const updateMarkStyle = (keyParam, style) => {
 input {
     background-color: transparent;
 }
+
+.upload{
+    display: inline-flex;
+}
 </style>
   
 <style lang='scss'>
@@ -348,16 +353,5 @@ input {
     resize: both;
     overflow: hidden;
     position: absolute;
-
-    // &::before {
-    //     content: "";
-    //     position: absolute;
-    //     width: 5px;
-    //     height: 5px;
-    //     top: 0;
-    //     right: 0;
-    //     z-index: 202;
-    //     cursor: nesw-resize;
-    // }
 }
 </style>
