@@ -21,6 +21,11 @@ const router = createRouter({
       name: 'fast-template',
       component: fastTemplate
     },
+    {
+      path: '/ocr',
+      name: 'func-ocr',
+      component: import("@/views/ocr/index.vue")
+    }
   ]
 })
 

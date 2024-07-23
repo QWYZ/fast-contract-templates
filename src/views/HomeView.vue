@@ -3,6 +3,8 @@
   <nav class="nav-list">
     <RouterLink class="nav" to="/fast-template">创建合同模板</RouterLink>
     <RouterLink class="nav" to="/view-pdf">预览合同</RouterLink>
+    <RouterLink class="nav" to="/ocr">OCR识别</RouterLink>
+
   </nav>
 </div>
 </template>
